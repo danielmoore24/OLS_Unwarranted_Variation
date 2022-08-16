@@ -17,4 +17,10 @@ study = StudyDefinition(
             "int": {"distribution": "population_ages"},
         },
     ),
+    sex=patients.sex(
+        return_expectations={
+            "rate": "universal",
+            "category": {"ratios": {"M": 0.49, "F": 0.51}},
+        },
+    ),
 )
