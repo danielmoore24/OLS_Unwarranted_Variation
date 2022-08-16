@@ -26,9 +26,9 @@ ggsave(
     filename="descriptive_imd.png", path=here::here("output")
 )
 
-plot_ethnicity <- ggplot(data=df_input, aes(df_input$ethnicity)) + geom_bar()
+#plot_ethnicity <- ggplot(data=df_input, aes(df_input$ethnicity)) + geom_bar()
 
-ggsave(
-    plot= plot_ethnicity,
-    filename="descriptive_ethnicity.png", path=here::here("output")
-)
+#ggsave(
+#    plot= plot_ethnicity,
+#    filename="descriptive_ethnicity.png", path=here::here("output")
+#)
