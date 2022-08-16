@@ -23,4 +23,13 @@ study = StudyDefinition(
             "category": {"ratios": {"M": 0.49, "F": 0.51}},
         },
     ),
+    imd=patients.address_as_of(
+        "2019-09-01",
+        returning="index_of_multiple_deprivation",
+        round_to_nearest=100,
+        return_expectations={
+            "rate": "universal",
+            "category": {"ratios": {"100": 0.1, "200": 0.2, "300": 0.7}},
+        },
+    ),
 )
