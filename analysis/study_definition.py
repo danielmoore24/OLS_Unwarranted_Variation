@@ -8,6 +8,12 @@ ethnicity_codes = codelist_from_csv(
     category_column="Grouping_6",
 )
 
+diabetes_t2_codes = codelist_from_csv(
+    "codelists/opensafely-type-2-diabetes.csv",
+    system="ctv3",
+    column="CTV3ID"
+)
+
 # Set up study
 study = StudyDefinition(
     default_expectations={
