@@ -2,7 +2,7 @@ library('tidyverse')
 
 df_input<- read_csv(
     here::here("output", "input.csv"),
-    col_types = cols(patient_id = col_integer(),age = col_double(), sex=col_factor(),imd=col_double(), ethnicity=col_factor())
+    col_types = cols(patient_id = col_integer(),age = col_double(), sex=col_factor(),imd=col_double(), ethnicity=col_factor(), region=col_factor())
 )
 
 plot_age <- ggplot(data=df_input, aes(df_input$age)) + geom_histogram()
@@ -33,3 +33,9 @@ ggsave(
     filename="descriptive_ethnicity.png", path=here::here("output")
 )
 
+plot_region <- ggplot(data=df_input, aes(df_input$region)) + geom_bar()
+
+ggsave(
+    plot= plot_region,
+    filename="descriptive_region.png", path=here::here("output")
+)
