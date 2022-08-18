@@ -1,11 +1,14 @@
 from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv  # NOQA
 
+# Defining codelists
 ethnicity_codes = codelist_from_csv(
     "codelists/opensafely-ethnicity.csv",
     system="ctv3",
     column="Code",
     category_column="Grouping_6",
 )
+
+# Set up study
 study = StudyDefinition(
     default_expectations={
         "date": {"earliest": "1900-01-01", "latest": "today"},
