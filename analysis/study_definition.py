@@ -1,18 +1,8 @@
 from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv  # NOQA
 
-# Defining codelists
-ethnicity_codes = codelist_from_csv(
-    "codelists/opensafely-ethnicity.csv",
-    system="ctv3",
-    column="Code",
-    category_column="Grouping_6",
-)
+from codelists import *
 
-diabetes_t2_codes = codelist_from_csv(
-    "codelists/opensafely-type-2-diabetes.csv",
-    system="ctv3",
-    column="CTV3ID"
-)
+# Defining codelists
 
 # Set up study
 study = StudyDefinition(
