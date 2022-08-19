@@ -1,6 +1,4 @@
 from cohortextractor import codelist, codelist_from_csv
-
-
 # Defining codelists
 ethnicity_codes = codelist_from_csv(
     "codelists/opensafely-ethnicity.csv",

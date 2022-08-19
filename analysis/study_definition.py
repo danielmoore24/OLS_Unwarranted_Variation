@@ -1,6 +1,5 @@
 from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv  # NOQA
-
-from codelists import *
+from codelists import ethnicity_codes, diabetes_t2_codes
 
 # Defining codelists
 
