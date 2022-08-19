@@ -79,4 +79,20 @@ study = StudyDefinition(
             },
         },
     ),
+    type2_diabetes=patients.with_these_clinical_events(
+        diabetes_t2_codes,
+        on_or_before="2019-09-01",
+        return_first_date_in_period=True,
+        include_month=True,
+    ),
+    diabetes=patients.categorised_as(
+        {
+            "Diabetes": "type2_diabetes",
+            "No_Diabetes": "DEFAULT",
+        },
+        return_expectations={
+            "category": {"ratios": {"Diabetes": 0.2, "No_Diabetes": 0.8}},
+            "rate": "universal"
+        },
+    ),
 )
