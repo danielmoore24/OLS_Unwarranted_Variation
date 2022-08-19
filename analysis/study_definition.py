@@ -220,4 +220,3 @@ study = StudyDefinition(
         },
     ),
 )
-
