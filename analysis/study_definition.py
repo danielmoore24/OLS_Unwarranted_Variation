@@ -33,8 +33,8 @@ VTE_AF_codes = combine_codelists(
 
 DOAC_codes = codelist_from_csv(
     "codelists/opensafely-direct-acting-oral-anticoagulants-doac.csv",
-    system="bnf",
-    column="bnf_code"
+    system="snomed",
+    column="id"
 )
 
 Warfarin_codes = codelist_from_csv(
@@ -151,6 +151,20 @@ study = StudyDefinition(
         },
         return_expectations={
             "category": {"ratios": {"VTE_or_AF": 0.05, "No_VTE_or_AF": 0.95}},
+            "rate": "universal"
+        },
+    ),
+    DOACs=patients.with_these_medications(
+        DOAC_codes,
+        between=["2019-02-01", "2020-02-01"],
+    ),
+    DOAC_users=patients.categorised_as(
+        {
+            "DOAC_user": "DOACs",
+            "Not_DOAC_user": "DEFAULT",
+        },
+        return_expectations={
+            "category": {"ratios": {"DOAC_user": 0.02, "Not_DOAC_user": 0.98}},
             "rate": "universal"
         },
     ),
