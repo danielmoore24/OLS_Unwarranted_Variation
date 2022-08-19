@@ -31,6 +31,31 @@ VTE_AF_codes = combine_codelists(
     AF_codes
 )
 
+DOAC_codes = codelist_from_csv(
+    "codelists/opensafely-direct-acting-oral-anticoagulants-doac.csv",
+    system="bnf",
+    column="bnf_code"
+)
+
+Warfarin_codes = codelist_from_csv(
+    "codelists/opensafely-warfarin.csv",
+    system="bnf",
+    column="bnf_code"
+)
+
+SGLT2_codes = codelist_from_csv(
+    "codelists/user-danielmoore24-sglt2-inhibitors.csv",
+    system="bnf",
+    column="code"
+)
+
+Diabetes_SOC_codes = codelist_from_csv(
+    "codelists/user-danielmoore24-diabetes-standard-of-care.csv",
+    system="bnf",
+    column="code"
+)
+
+
 # Set up study
 study = StudyDefinition(
     default_expectations={

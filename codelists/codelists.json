@@ -23,6 +23,30 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/vte-classified-codes/08b94f7d/",
       "downloaded_at": "2022-08-19 13:19:12.532952Z",
       "sha": "a6c74aece202b32f5e4242ae69e73d285f3a3792"
+    },
+    "opensafely-direct-acting-oral-anticoagulants-doac.csv": {
+      "id": "opensafely/direct-acting-oral-anticoagulants-doac/2020-10-05",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/direct-acting-oral-anticoagulants-doac/2020-10-05/",
+      "downloaded_at": "2022-08-19 14:12:39.600960Z",
+      "sha": "50f69d9c0bcb0e58aadb76fb4749d33f74f66253"
+    },
+    "opensafely-warfarin.csv": {
+      "id": "opensafely/warfarin/2020-10-05",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/warfarin/2020-10-05/",
+      "downloaded_at": "2022-08-19 14:12:39.794048Z",
+      "sha": "971d819a24d4c04bea3000390e9fb2f718fb3b22"
+    },
+    "user-danielmoore24-sglt2-inhibitors.csv": {
+      "id": "user/danielmoore24/sglt2-inhibitors/560d423f",
+      "url": "https://codelists.opensafely.org/codelist/user/danielmoore24/sglt2-inhibitors/560d423f/",
+      "downloaded_at": "2022-08-19 14:12:39.967529Z",
+      "sha": "b089e4b1aeb8ff1663c01d475a5eeb833dc03247"
+    },
+    "user-danielmoore24-diabetes-standard-of-care.csv": {
+      "id": "user/danielmoore24/diabetes-standard-of-care/71cf756a",
+      "url": "https://codelists.opensafely.org/codelist/user/danielmoore24/diabetes-standard-of-care/71cf756a/",
+      "downloaded_at": "2022-08-19 14:12:40.190909Z",
+      "sha": "e80aa730277165d99741a715e5dd07635b4b2f57"
     }
   }
 }

@@ -2,3 +2,7 @@ opensafely/ethnicity/2020-04-27
 opensafely/type-2-diabetes/2020-06-29
 opensafely/atrial-fibrillation-clinical-finding/2020-07-09
 opensafely/vte-classified-codes/08b94f7d
+opensafely/direct-acting-oral-anticoagulants-doac/2020-10-05
+opensafely/warfarin/2020-10-05
+user/danielmoore24/sglt2-inhibitors/560d423f/
+user/danielmoore24/diabetes-standard-of-care/71cf756a
