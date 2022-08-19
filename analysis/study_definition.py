@@ -39,19 +39,19 @@ DOAC_codes = codelist_from_csv(
 
 Warfarin_codes = codelist_from_csv(
     "codelists/opensafely-warfarin.csv",
-    system="bnf",
-    column="bnf_code"
+    system="snomed",
+    column="id"
 )
 
 SGLT2_codes = codelist_from_csv(
     "codelists/user-danielmoore24-sglt2-inhibitors.csv",
-    system="bnf",
+    system="snomed",
     column="code"
 )
 
 Diabetes_SOC_codes = codelist_from_csv(
     "codelists/user-danielmoore24-diabetes-standard-of-care.csv",
-    system="bnf",
+    system="snomed",
     column="code"
 )
 
@@ -168,4 +168,56 @@ study = StudyDefinition(
             "rate": "universal"
         },
     ),
+    Warfarin=patients.with_these_medications(
+        Warfarin_codes,
+        between=["2019-02-01", "2020-02-01"],
+    ),
+    Warfarin_users=patients.categorised_as(
+        {
+            "Warfarin_user": "Warfarin",
+            "Not_Warfarin_user": "DEFAULT",
+        },
+        return_expectations={
+            "category": {
+                "ratios": {
+                    "Warfarin_user": 0.07,
+                    "Not_Warfarin_user": 0.93}},
+            "rate": "universal"
+        },
+    ),
+    SGLT2s=patients.with_these_medications(
+        SGLT2_codes,
+        between=["2019-02-01", "2020-02-01"],
+    ),
+    SGLT2_users=patients.categorised_as(
+        {
+            "SGLT2_user": "SGLT2s",
+            "Not_SGLT2_user": "DEFAULT",
+        },
+        return_expectations={
+            "category": {
+                "ratios": {
+                    "SGLT2_user": 0.04,
+                    "Not_SGLT2_user": 0.96}},
+            "rate": "universal"
+        },
+    ),
+    Diabetes_SOCs=patients.with_these_medications(
+        Diabetes_SOC_codes,
+        between=["2019-02-01", "2020-02-01"],
+    ),
+    Diabetes_SOC_users=patients.categorised_as(
+        {
+            "Diabetes_SOC_user": "Diabetes_SOCs",
+            "Not_Diabetes_SOC_user": "DEFAULT",
+        },
+        return_expectations={
+            "category": {
+                "ratios": {
+                    "Diabetes_SOC_user": 0.1,
+                    "Not_Diabetes_SOC_user": 0.9}},
+            "rate": "universal"
+        },
+    ),
 )
+
