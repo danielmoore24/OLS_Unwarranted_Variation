@@ -1,3 +1,4 @@
 opensafely/ethnicity/2020-04-27
 opensafely/type-2-diabetes/2020-06-29
-opensafely/VTE_AF/2022-08-19
+opensafely/atrial-fibrillation-clinical-finding/2020-07-09
+opensafely/vte-classified-codes/08b94f7d

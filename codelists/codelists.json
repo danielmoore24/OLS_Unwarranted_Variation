@@ -11,6 +11,18 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/type-2-diabetes/2020-06-29/",
       "downloaded_at": "2022-08-18 16:04:30.263753Z",
       "sha": "21a0fd8e041c19abd876970d75b389b6904dc901"
+    },
+    "opensafely-atrial-fibrillation-clinical-finding.csv": {
+      "id": "opensafely/atrial-fibrillation-clinical-finding/2020-07-09",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/atrial-fibrillation-clinical-finding/2020-07-09/",
+      "downloaded_at": "2022-08-19 13:19:12.208803Z",
+      "sha": "edccc1a96570988b7e92a7a6e44cdee70a0ac179"
+    },
+    "opensafely-vte-classified-codes.csv": {
+      "id": "opensafely/vte-classified-codes/08b94f7d",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/vte-classified-codes/08b94f7d/",
+      "downloaded_at": "2022-08-19 13:19:12.532952Z",
+      "sha": "a6c74aece202b32f5e4242ae69e73d285f3a3792"
     }
   }
 }

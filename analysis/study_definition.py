@@ -1,4 +1,4 @@
-from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv  # NOQA
+from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv, combine_codelists  # NOQA
 
 # Defining codelists
 ethnicity_codes = codelist_from_csv(
@@ -13,6 +13,24 @@ diabetes_t2_codes = codelist_from_csv(
     system="ctv3",
     column="CTV3ID"
 )
+
+VTE_codes = codelist_from_csv(
+    "codelists/opensafely-vte-classified-codes.csv",
+    system="ctv3",
+    column="CTV3Code"
+)
+
+AF_codes = codelist_from_csv(
+    "codelists/opensafely-atrial-fibrillation-clinical-finding.csv",
+    system="ctv3",
+    column="CTV3Code"
+)
+
+VTE_AF_codes = combine_codelists(
+    VTE_codes,
+    AF_codes
+)
+
 # Set up study
 study = StudyDefinition(
     default_expectations={
@@ -92,6 +110,22 @@ study = StudyDefinition(
         },
         return_expectations={
             "category": {"ratios": {"Diabetes": 0.2, "No_Diabetes": 0.8}},
+            "rate": "universal"
+        },
+    ),
+    VTE_AF=patients.with_these_clinical_events(
+        VTE_AF_codes,
+        on_or_before="2019-09-01",
+        return_first_date_in_period=True,
+        include_month=True,
+    ),
+    VTE_or_AF=patients.categorised_as(
+        {
+            "VTE_or_AF": "VTE_AF",
+            "No_VTE_or_AF": "DEFAULT",
+        },
+        return_expectations={
+            "category": {"ratios": {"VTE_or_AF": 0.05, "No_VTE_or_AF": 0.95}},
             "rate": "universal"
         },
     ),
