@@ -87,46 +87,46 @@ ggsave(
 # Plot measures
 
 # create look-up table to iterate over
-md_tbl <- tibble(
-  measure = "DOACs",
-  measure_label = "DOACs",
-  by = "region",
-  by_label = "by region",
-  id = paste0(measure, "_", by),
-  numerator = measure,
-  denominator = VTE_AF,
-  group_by = "region",
-)
+# md_tbl <- tibble(
+#   measure = "DOACs",
+#   measure_label = "DOACs",
+#   by = "region",
+#   by_label = "by region",
+#   id = paste0(measure, "_", by),
+#   numerator = measure,
+#   denominator = VTE_AF,
+#   group_by = "region",
+# )
 
 ## import measures data from look-up
-measures <- md_tbl %>%
-  mutate(
-    data = map(id, ~read_csv(here::here("output", "measures", glue::glue("measure_{.}.csv")))),
-  )
+# measures <- md_tbl %>%
+#   mutate(
+#     data = map(id, ~read_csv(here::here("output", "measures", glue::glue("measure_{.}.csv")))),
+#   )
 
 
 ## generate plots for each measure within the data frame
-measures_plots <- measures %>%
-    plot_by = pmap(lst( group_by, data, measure_label, by_label),
-                  function(group_by, data, measure_label, by_label){
-                    data %>% 
-                    ggplot()+
-                      geom_bar(aes_string(x=by, y=measure, group=group_by), alpha=0.2, colour='blue', size=0.25)
-                  },
-)
+# measures_plots <- measures %>%
+#     plot_by = pmap(lst( group_by, data, measure_label, by_label),
+#                   function(group_by, data, measure_label, by_label){
+#                     data %>% 
+#                     ggplot()+
+#                       geom_bar(aes_string(x=by, y=measure, group=group_by), alpha=0.2, colour='blue', size=0.25)
+#                   },
+# )
 # create directory where output will be saved
-fs::dir_create(here::here("output", "plots"))
+# fs::dir_create(here::here("output", "plots"))
 
 ## plot the charts (by variable)
-measures_plots %>%
-  transmute(
-    plot = plot_by,
-    units = "cm",
-    height = 10,
-    width = 15,
-    limitsize=FALSE,
-    filename = str_c("plot_each_", id, ".png"),
-    path = here::here("output", "plots"),
-  ) %>%
-  pwalk(ggsave)
+# measures_plots %>%
+#   transmute(
+#     plot = plot_by,
+#     units = "cm",
+#     height = 10,
+#     width = 15,
+#     limitsize=FALSE,
+#     filename = str_c("plot_each_", id, ".png"),
+#     path = here::here("output", "plots"),
+#   ) %>%
+#   pwalk(ggsave)
 

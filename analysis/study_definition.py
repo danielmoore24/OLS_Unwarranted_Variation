@@ -220,12 +220,13 @@ study = StudyDefinition(
         },
     ),
 )
+#
 # Set up measures
-measures = [
-    Measure(
-        id="DOACs_region",
-        numerator="DOAC_user",
-        denominator="VTE_AF",
-        group_by="region",
-    ),
-]
+# measures = [
+#     Measure(
+#         id="DOACs_region",
+#         numerator="DOAC_user",
+#         denominator="VTE_AF",
+#         group_by="region",
+#     ),
+# ]
