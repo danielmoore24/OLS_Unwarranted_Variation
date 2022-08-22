@@ -1,4 +1,4 @@
-from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv, combine_codelists  # NOQA
+from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv, combine_codelists, Measure  # NOQA
 
 # Defining codelists
 ethnicity_codes = codelist_from_csv(
@@ -220,3 +220,12 @@ study = StudyDefinition(
         },
     ),
 )
+# Set up measures
+measures = [
+    Measure(
+        id="DOACs_region",
+        numerator="DOAC_user",
+        denominator="VTE_AF",
+        group_by="region",
+    ),
+]
