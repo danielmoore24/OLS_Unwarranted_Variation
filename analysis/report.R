@@ -111,10 +111,25 @@ diabetes_uptake_by_region <- df_input %>%
 
 dat<-melt(subset(diabetes_uptake_by_region, select=-Total_Diabetes_Patients), id="region")
 ###plot diabetes medicine spread by region
-plot_diabetes_uptake_by_region <- ggplot(dat, aes(x=reorder(region, -value), y=value, fill=variable)) +
-  geom_bar(stat="identity")
+diabetes_uptake_by_region_plot <- ggplot(dat, aes(x=reorder(region, -value), y=value, fill=variable)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=value), size=3, position = position_stack(vjust = 0.5)) +
+  coord_flip() +
+  scale_fill_manual('Medicine', values=c("#00ad93", "#D4DCFF", "#7D83FF","#cd66cc"), labels=c("SGLT2 only", "SOC only", "Both", "Neither")) +
+  labs(
+    title=paste("Uptake of SGLT2 inhibitors varies by region across England"),
+    caption=paste("Source: OpenSafely"),
+    x= "Region",
+    y= "Number of Patients"
+  ) +
+  theme(
+    panel.background = element_rect(fill=NA),
+    panel.grid.major = element_blank(),
+    plot.title = element_text(hjust = 0.6),
+    plot.caption = element_text(hjust = 0)
+  )
 
  ggsave(
-    plot= plot_diabetes_uptake_by_region,
+    plot= diabetes_uptake_by_region_plot,
     filename="descriptive_SGLT2s_by_Region.png", path=here::here("output")
 ) 
