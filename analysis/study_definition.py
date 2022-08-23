@@ -156,68 +156,31 @@ study = StudyDefinition(
     ),
     DOACs=patients.with_these_medications(
         DOAC_codes,
+        returning="binary_flag",
         between=["2019-02-01", "2020-02-01"],
-    ),
-    DOAC_users=patients.categorised_as(
-        {
-            "DOAC_user": "DOACs",
-            "Not_DOAC_user": "DEFAULT",
-        },
-        return_expectations={
-            "category": {"ratios": {"DOAC_user": 0.02, "Not_DOAC_user": 0.98}},
-            "rate": "universal"
-        },
+        find_first_match_in_period=True,
+        return_expectations={"incidence": 0.2},
     ),
     Warfarin=patients.with_these_medications(
         Warfarin_codes,
+        returning="binary_flag",
+        find_first_match_in_period=True,
         between=["2019-02-01", "2020-02-01"],
-    ),
-    Warfarin_users=patients.categorised_as(
-        {
-            "Warfarin_user": "Warfarin",
-            "Not_Warfarin_user": "DEFAULT",
-        },
-        return_expectations={
-            "category": {
-                "ratios": {
-                    "Warfarin_user": 0.07,
-                    "Not_Warfarin_user": 0.93}},
-            "rate": "universal"
-        },
+        return_expectations={"incidence": 0.2},
     ),
     SGLT2s=patients.with_these_medications(
         SGLT2_codes,
+        returning="binary_flag",
+        find_first_match_in_period=True,
         between=["2019-02-01", "2020-02-01"],
-    ),
-    SGLT2_users=patients.categorised_as(
-        {
-            "SGLT2_user": "SGLT2s",
-            "Not_SGLT2_user": "DEFAULT",
-        },
-        return_expectations={
-            "category": {
-                "ratios": {
-                    "SGLT2_user": 0.04,
-                    "Not_SGLT2_user": 0.96}},
-            "rate": "universal"
-        },
+        return_expectations={"incidence": 0.2},
     ),
     Diabetes_SOCs=patients.with_these_medications(
         Diabetes_SOC_codes,
+        returning="binary_flag",
+        find_first_match_in_period=True,
         between=["2019-02-01", "2020-02-01"],
-    ),
-    Diabetes_SOC_users=patients.categorised_as(
-        {
-            "Diabetes_SOC_user": "Diabetes_SOCs",
-            "Not_Diabetes_SOC_user": "DEFAULT",
-        },
-        return_expectations={
-            "category": {
-                "ratios": {
-                    "Diabetes_SOC_user": 0.1,
-                    "Not_Diabetes_SOC_user": 0.9}},
-            "rate": "universal"
-        },
+        return_expectations={"incidence": 0.2},
     ),
 )
 #

@@ -2,7 +2,7 @@ library('tidyverse')
 
 df_input<- read_csv(
     here::here("output", "input.csv"),
-    col_types = cols(patient_id = col_integer(),age = col_double(), sex=col_factor(),imd=col_double(), ethnicity=col_factor(), region=col_factor(), diabetes=col_factor(), VTE_or_AF=col_factor(), DOAC_users=col_factor(), Warfarin_users=col_factor(), SGLT2_users=col_factor(), Diabetes_SOC_users=col_factor())
+    col_types = cols(patient_id = col_integer(),age = col_double(), sex=col_factor(),imd=col_double(), ethnicity=col_factor(), region=col_factor(), diabetes=col_factor(), VTE_or_AF=col_factor(), DOACs=col_factor(), Warfarin=col_factor(), SGLT2s=col_factor(), Diabetes_SOCs=col_factor())
 )
 
 # Plot basic variables
@@ -56,28 +56,28 @@ ggsave(
     filename="descriptive_VTE_AF.png", path=here::here("output")
 )
 
-plot_DOACs <- ggplot(data=df_input, aes(df_input$DOAC_users)) + geom_bar()
+plot_DOACs <- ggplot(data=df_input, aes(df_input$DOACs)) + geom_bar()
 
 ggsave(
     plot= plot_DOACs,
     filename="descriptive_DOACs.png", path=here::here("output")
 )
 
-plot_Warfarin <- ggplot(data=df_input, aes(df_input$Warfarin_users)) + geom_bar()
+plot_Warfarin <- ggplot(data=df_input, aes(df_input$Warfarin)) + geom_bar()
 
 ggsave(
     plot= plot_Warfarin,
     filename="descriptive_Warfarin.png", path=here::here("output")
 )
 
-plot_SGLT2 <- ggplot(data=df_input, aes(df_input$SGLT2_users)) + geom_bar()
+plot_SGLT2 <- ggplot(data=df_input, aes(df_input$SGLT2s)) + geom_bar()
 
 ggsave(
     plot= plot_SGLT2,
     filename="descriptive_SGLT2.png", path=here::here("output")
 )
 
-plot_Diabetes_SOC <- ggplot(data=df_input, aes(df_input$Diabetes_SOC_users)) + geom_bar()
+plot_Diabetes_SOC <- ggplot(data=df_input, aes(df_input$Diabetes_SOCs)) + geom_bar()
 
 ggsave(
     plot= plot_Diabetes_SOC,
