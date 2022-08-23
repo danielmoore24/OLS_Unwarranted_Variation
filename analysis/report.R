@@ -1,4 +1,5 @@
 library('tidyverse')
+library('reshape2')
 
 df_input<- read_csv(
     here::here("output", "input.csv"),
@@ -99,3 +100,21 @@ ggsave(
     plot= plot_diabetes_region_summary,
     filename="descriptive_Diabetes_by_Region.png", path=here::here("output")
 )
+
+###create table of SGLT2 users per eligible pop by region
+diabetes_uptake_by_region <- df_input %>%
+  group_by(region) %>%
+  summarise(Total_Diabetes_Patients = sum(Diabetes), SGLT2_only_users = sum(SGLT2s[Diabetes_SOCs==0 & Diabetes==1]),
+            SOC_only_users = sum(Diabetes_SOCs[SGLT2s==0 & Diabetes==1]),
+            Both = sum(Diabetes_SOCs[SGLT2s==1 & Diabetes==1]), Neither = Total_Diabetes_Patients - SGLT2_only_users
+            - SOC_only_users - Both)
+
+dat<-melt(subset(diabetes_uptake_by_region, select=-Total_Diabetes_Patients), id="region")
+###plot diabetes medicine spread by region
+plot_diabetes_uptake_by_region <- ggplot(dat, aes(x=reorder(region, -value), y=value, fill=variable)) +
+  geom_bar(stat="identity")
+
+ ggsave(
+    plot= plot_diabetes_uptake_by_region,
+    filename="descriptive_SGLT2s_by_Region.png", path=here::here("output")
+) 

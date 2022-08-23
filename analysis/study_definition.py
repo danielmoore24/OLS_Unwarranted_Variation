@@ -127,14 +127,14 @@ study = StudyDefinition(
         on_or_before="2019-09-01",
         returning="binary_flag",
         find_first_match_in_period=True,
-        return_expectations={"incidence": 0.2},
+        return_expectations={"incidence": 0.6},
     ),
     VTE_AF=patients.with_these_clinical_events(
         VTE_AF_codes,
         on_or_before="2019-09-01",
         returning="binary_flag",
         find_first_match_in_period=True,
-        return_expectations={"incidence": 0.2},
+        return_expectations={"incidence": 0.6},
     ),
     DOACs=patients.with_these_medications(
         DOAC_codes,
