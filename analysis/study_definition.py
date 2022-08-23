@@ -122,37 +122,19 @@ study = StudyDefinition(
             },
         },
     ),
-    type2_diabetes=patients.with_these_clinical_events(
+    Diabetes=patients.with_these_clinical_events(
         diabetes_t2_codes,
         on_or_before="2019-09-01",
-        return_first_date_in_period=True,
-        include_month=True,
-    ),
-    diabetes=patients.categorised_as(
-        {
-            "Diabetes": "type2_diabetes",
-            "No_Diabetes": "DEFAULT",
-        },
-        return_expectations={
-            "category": {"ratios": {"Diabetes": 0.2, "No_Diabetes": 0.8}},
-            "rate": "universal"
-        },
+        returning="binary_flag",
+        find_first_match_in_period=True,
+        return_expectations={"incidence": 0.2},
     ),
     VTE_AF=patients.with_these_clinical_events(
         VTE_AF_codes,
         on_or_before="2019-09-01",
-        return_first_date_in_period=True,
-        include_month=True,
-    ),
-    VTE_or_AF=patients.categorised_as(
-        {
-            "VTE_or_AF": "VTE_AF",
-            "No_VTE_or_AF": "DEFAULT",
-        },
-        return_expectations={
-            "category": {"ratios": {"VTE_or_AF": 0.05, "No_VTE_or_AF": 0.95}},
-            "rate": "universal"
-        },
+        returning="binary_flag",
+        find_first_match_in_period=True,
+        return_expectations={"incidence": 0.2},
     ),
     DOACs=patients.with_these_medications(
         DOAC_codes,
