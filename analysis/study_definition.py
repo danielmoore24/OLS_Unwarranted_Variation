@@ -79,13 +79,28 @@ study = StudyDefinition(
             "category": {"ratios": {"M": 0.49, "F": 0.51}},
         },
     ),
-    imd=patients.address_as_of(
-        "2019-09-01",
-        returning="index_of_multiple_deprivation",
-        round_to_nearest=100,
+    imdQ5=patients.categorised_as(
+        {
+            "Unknown": "DEFAULT",
+            "1 (most deprived)": "imd >= 0 AND imd < 32844*1/5",
+            "2": "imd >= 32844*1/5 AND imd < 32844*2/5",
+            "3": "imd >= 32844*2/5 AND imd < 32844*3/5",
+            "4": "imd >= 32844*3/5 AND imd < 32844*4/5",
+            "5 (least deprived)": "imd >= 32844*4/5 AND imd <= 32844",
+        },
+        imd=patients.address_as_of(
+            "2019-09-01",
+            returning="index_of_multiple_deprivation",
+            round_to_nearest=100,
+        ),
         return_expectations={
-            "rate": "universal",
-            "category": {"ratios": {"100": 0.1, "200": 0.2, "300": 0.7}},
+            "category": {"ratios": {
+                "1 (most deprived)": 0.2,
+                "2": 0.2,
+                "3": 0.2,
+                "4": 0.2,
+                "5 (least deprived)": 0.2}},
+            "incidence": 1,
         },
     ),
     ethnicity=patients.with_these_clinical_events(

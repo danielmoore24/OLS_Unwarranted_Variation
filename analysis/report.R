@@ -3,7 +3,7 @@ library('reshape2')
 
 df_input<- read_csv(
     here::here("output", "input.csv"),
-    col_types = cols(patient_id = col_integer(),age = col_double(), sex=col_factor(),imd=col_double(), ethnicity=col_factor(), region=col_factor(), Diabetes=col_integer(), VTE_AF=col_integer(), DOACs=col_integer(), Warfarin=col_integer(), SGLT2s=col_integer(), Diabetes_SOCs=col_integer())
+    col_types = cols(patient_id = col_integer(),age = col_double(), sex=col_factor(),imdQ5=col_factor(), ethnicity=col_factor(), region=col_factor(), Diabetes=col_integer(), VTE_AF=col_integer(), DOACs=col_integer(), Warfarin=col_integer(), SGLT2s=col_integer(), Diabetes_SOCs=col_integer())
 )
 
 # Plot basic variables
@@ -22,11 +22,11 @@ ggsave(
     filename="descriptive_sex.png", path=here::here("output")
 )
 
-plot_imd <- ggplot(data=df_input, aes(df_input$imd)) + geom_bar()
+plot_imdQ5 <- ggplot(data=df_input, aes(df_input$imdQ5)) + geom_bar()
 
 ggsave(
-    plot= plot_imd,
-    filename="descriptive_imd.png", path=here::here("output")
+    plot= plot_imdQ5,
+    filename="descriptive_imdQ5.png", path=here::here("output")
 )
 
 plot_ethnicity <- ggplot(data=df_input, aes(df_input$ethnicity)) + geom_bar()
@@ -86,7 +86,7 @@ ggsave(
 )
 
 # Test real outputs
-cut_by <- c("region","ethnicity") #vector of variable names
+cut_by <- c("region","ethnicity", "sex", "imdQ5", "age_group") #vector of variable names
 
 ###Rename ethnicity groupings
 df_input$ethnicity <- as.character(df_input$ethnicity)
@@ -95,6 +95,10 @@ df_input['ethnicity'][df_input['ethnicity'] == '2'] <- 'Mixed'
 df_input['ethnicity'][df_input['ethnicity'] == '3'] <- 'South Asian'
 df_input['ethnicity'][df_input['ethnicity'] == '4'] <- 'Black'
 df_input['ethnicity'][df_input['ethnicity'] == '5'] <- 'Other'
+
+
+###create age bands###
+df_input["age_group"] = cut(df_input$age, c(0, 17, 24, 34, 44, 54, 69, 79, Inf), c("0-17", "18-24", "25-34", "35-44", "45-54", "55-69", "70-79", ">79"), include.lowest=TRUE)
 
 ###Diabetes###
 
@@ -112,8 +116,11 @@ for(i in cut_by) {
 ###Melt data to prepare for plot loop
 diabetes_region<-mutate(melt(subset(diabetes_uptake_by_region, select=-Total_Diabetes_Patients), id="region"),indvar=region)
 diabetes_ethnicity<-mutate(na.omit(melt(subset(diabetes_uptake_by_ethnicity, select=-Total_Diabetes_Patients), id="ethnicity")),indvar=ethnicity) # removed NA values
+diabetes_sex<-mutate(melt(subset(diabetes_uptake_by_sex, select=-Total_Diabetes_Patients), id="sex"),indvar=sex)
+diabetes_imdQ5<-mutate(melt(subset(diabetes_uptake_by_imdQ5, select=-Total_Diabetes_Patients), id="imdQ5"),indvar=imdQ5)
+diabetes_age_group<-mutate(melt(subset(diabetes_uptake_by_age_group, select=-Total_Diabetes_Patients), id="age_group"),indvar=age_group)
 
-total_plot_list<-c("diabetes_region", "diabetes_ethnicity") # create vector of table names
+total_plot_list<-c("diabetes_region", "diabetes_ethnicity", "diabetes_sex", "diabetes_imdQ5", "diabetes_age_group") # create vector of table names
 
 ###Function to plot total diabetes graphs
 total_plotter <- function(data) {
@@ -160,8 +167,11 @@ for(i in cut_by) {
 ###Melt data to prepare for plot loop
 diabetes_prop_region<-mutate(melt(subset(diabetes_proportion_by_region, select=-Total_Diabetes_Patients), id="region"),indvar=region)
 diabetes_prop_ethnicity<-mutate(na.omit(melt(subset(diabetes_proportion_by_ethnicity, select=-Total_Diabetes_Patients), id="ethnicity")),indvar=ethnicity) # removed NA values
+diabetes_prop_sex<-mutate(melt(subset(diabetes_proportion_by_sex, select=-Total_Diabetes_Patients), id="sex"),indvar=sex)
+diabetes_prop_imdQ5<-mutate(melt(subset(diabetes_proportion_by_imdQ5, select=-Total_Diabetes_Patients), id="imdQ5"),indvar=imdQ5)
+diabetes_prop_age_group<-mutate(melt(subset(diabetes_proportion_by_age_group, select=-Total_Diabetes_Patients), id="age_group"),indvar=age_group)
 
-prop_plot_list<-c("diabetes_prop_region", "diabetes_prop_ethnicity") # create vector of table names
+prop_plot_list<-c("diabetes_prop_region", "diabetes_prop_ethnicity", "diabetes_prop_sex", "diabetes_prop_imdQ5", "diabetes_prop_age_group") # create vector of table names
 
 ###Function to plot diabetes proportion graphs
 prop_plotter <- function(data) {
