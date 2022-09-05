@@ -11,15 +11,15 @@ actions:
       highly_sensitive:
         cohort: output/input.csv
 
-#   generate_measures:
-#     run: cohortextractor:latest generate_measures --study-definition study_definition --output-dir=output/measures
-#     needs: [generate_study_population]
-#     outputs:
-#       moderately_sensitive:
-#         measure_csv: output/measures/measure_*.csv
-
   describe:
     run: r:latest analysis/report.R
+    needs: [generate_study_population]
+    outputs:
+      moderately_sensitive:
+        cohort: output/pre_covid_*.png
+
+  pre_covid:
+    run: r:latest analysis/cohort_viewer.R
     needs: [generate_study_population]
     outputs:
       moderately_sensitive:

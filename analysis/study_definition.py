@@ -1,6 +1,8 @@
-from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv, combine_codelists, Measure  # NOQA
+from cohortextractor import StudyDefinition, patients, Measure, codelist, codelist_from_csv, combine_codelists  # NOQA
 
-# Defining codelists
+# CODE LISTS
+# All codelists are held within the codelist/ folder
+
 ethnicity_codes = codelist_from_csv(
     "codelists/opensafely-ethnicity.csv",
     system="ctv3",
@@ -57,6 +59,7 @@ Diabetes_SOC_codes = codelist_from_csv(
 
 
 # Set up study
+
 study = StudyDefinition(
     default_expectations={
         "date": {"earliest": "1900-01-01", "latest": "today"},
@@ -180,13 +183,5 @@ study = StudyDefinition(
         return_expectations={"incidence": 0.2},
     ),
 )
-#
-# Set up measures
-# measures = [
-#     Measure(
-#         id="DOACs_region",
-#         numerator="DOAC_user",
-#         denominator="VTE_AF",
-#         group_by="region",
-#     ),
-# ]
+
+
