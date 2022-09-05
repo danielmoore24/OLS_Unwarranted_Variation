@@ -69,7 +69,7 @@ for(i in seq_along(total_plot_list)){
   print(total_plotter(get(total_plot_list[i])))
   ggsave(
     plot=total_plotter(get(total_plot_list[i])),
-    filename=paste0("pre_covid_",total_plot_list[i],".png"),
+    filename=paste0("alltime_",total_plot_list[i],".png"),
     path=here::here("output"))
 }
 
@@ -121,6 +121,6 @@ for(i in seq_along(prop_plot_list)){
   print(prop_plotter(get(prop_plot_list[i])))
   ggsave(
     plot=prop_plotter(get(prop_plot_list[i])),
-    filename=paste0("pre_covid_",prop_plot_list[i],".png"),
+    filename=paste0("alltime_",prop_plot_list[i],".png"),
     path=here::here("output"))
 }

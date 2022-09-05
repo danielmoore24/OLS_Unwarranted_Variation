@@ -11,16 +11,39 @@ actions:
       highly_sensitive:
         cohort: output/input.csv
 
-  describe:
+  alltime:
     run: r:latest analysis/report.R
     needs: [generate_study_population]
     outputs:
       moderately_sensitive:
-        cohort: output/pre_covid_*.png
+        cohort: output/alltime_*.png
 
-  pre_covid:
+  describe:
     run: r:latest analysis/cohort_viewer.R
     needs: [generate_study_population]
     outputs:
       moderately_sensitive:
         cohort: output/descriptive_*.png
+
+
+
+  generate_TS_population:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_TS --index-date-range "2019-01-01 to 2022-09-01 by month" --output-dir=output/measures
+    outputs:
+      highly_sensitive:
+        cohort: output/measures/input_TS_*.csv
+
+  generate_TS_measures:
+    run: cohortextractor:latest generate_measures --study-definition study_definition_TS --output-dir=output/measures
+    needs: [generate_TS_population]
+    outputs:
+      moderately_sensitive:
+        measure_csv: output/measures/measure_*.csv
+
+
+  timeseries:
+    run: r:latest analysis/report_TS.R
+    needs: [generate_TS_measures]
+    outputs:
+      moderately_sensitive:
+        cohort: output/TS_*.png

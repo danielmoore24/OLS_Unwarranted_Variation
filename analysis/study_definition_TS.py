@@ -57,20 +57,22 @@ Diabetes_SOC_codes = codelist_from_csv(
     column="code"
 )
 
-
-# Set up study
+# STUDY POPULATION
+index_date = "2019-01-01"
+end_date = "today"
 
 study = StudyDefinition(
     default_expectations={
-        "date": {"earliest": "1900-01-01", "latest": "today"},
+        "date": {"earliest": index_date, "latest": "today"},
         "rate": "uniform",
-        "incidence": 0.5,
+        "incidence": 1,
     },
+    index_date=index_date,
     population=patients.registered_with_one_practice_between(
-        "2019-02-01", "2020-02-01"
+        index_date, end_date
     ),
     age=patients.age_as_of(
-        "2019-09-01",
+        index_date,
         return_expectations={
             "rate": "universal",
             "int": {"distribution": "population_ages"},
@@ -92,7 +94,7 @@ study = StudyDefinition(
             "5 (least deprived)": "imd >= 32844*4/5 AND imd <= 32844",
         },
         imd=patients.address_as_of(
-            "2019-09-01",
+            index_date,
             returning="index_of_multiple_deprivation",
             round_to_nearest=100,
         ),
@@ -122,7 +124,7 @@ study = StudyDefinition(
         },
     ),
     region=patients.registered_practice_as_of(
-        "2019-09-01",
+        index_date,
         returning="nuts1_region_name",
         return_expectations={
             "rate": "universal",
@@ -142,14 +144,14 @@ study = StudyDefinition(
     ),
     Diabetes=patients.with_these_clinical_events(
         diabetes_t2_codes,
-        on_or_before="2019-09-01",
+        on_or_before=index_date,
         returning="binary_flag",
         find_first_match_in_period=True,
         return_expectations={"incidence": 0.6},
     ),
     VTE_AF=patients.with_these_clinical_events(
         VTE_AF_codes,
-        on_or_before="2019-09-01",
+        on_or_before=index_date,
         returning="binary_flag",
         find_first_match_in_period=True,
         return_expectations={"incidence": 0.6},
@@ -157,7 +159,7 @@ study = StudyDefinition(
     DOACs=patients.with_these_medications(
         DOAC_codes,
         returning="binary_flag",
-        between=["2019-02-01", "2020-02-01"],
+        between=[index_date, end_date],
         find_first_match_in_period=True,
         return_expectations={"incidence": 0.2},
     ),
@@ -165,21 +167,36 @@ study = StudyDefinition(
         Warfarin_codes,
         returning="binary_flag",
         find_first_match_in_period=True,
-        between=["2019-02-01", "2020-02-01"],
+        between=[index_date, end_date],
         return_expectations={"incidence": 0.2},
     ),
     SGLT2s=patients.with_these_medications(
         SGLT2_codes,
         returning="binary_flag",
         find_first_match_in_period=True,
-        between=["2019-02-01", "2020-02-01"],
+        between=[index_date, end_date],
         return_expectations={"incidence": 0.2},
     ),
     Diabetes_SOCs=patients.with_these_medications(
         Diabetes_SOC_codes,
         returning="binary_flag",
         find_first_match_in_period=True,
-        between=["2019-02-01", "2020-02-01"],
+        between=[index_date, end_date],
         return_expectations={"incidence": 0.2},
     ),
 )
+
+measures = [
+    Measure(
+        id="SGLT2_ethnicity",
+        numerator="SGLT2s",
+        denominator="Diabetes",
+        group_by="ethnicity"
+    ),
+    Measure(
+        id="SGLT2_region",
+        numerator="SGLT2s",
+        denominator="Diabetes",
+        group_by="region"
+    ),
+]
