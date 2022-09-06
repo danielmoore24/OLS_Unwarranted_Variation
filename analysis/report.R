@@ -42,10 +42,10 @@ diabetes_sex<-mutate(melt(subset(diabetes_uptake_by_sex, select=-Total_Diabetes_
 diabetes_imdQ5<-mutate(melt(subset(diabetes_uptake_by_imdQ5, select=-Total_Diabetes_Patients), id="imdQ5"),indvar=imdQ5)
 diabetes_age_group<-mutate(melt(subset(diabetes_uptake_by_age_group, select=-Total_Diabetes_Patients), id="age_group"),indvar=age_group)
 
-total_plot_list<-c("diabetes_region", "diabetes_ethnicity", "diabetes_sex", "diabetes_imdQ5", "diabetes_age_group") # create vector of table names
+total_diabetes_list<-c("diabetes_region", "diabetes_ethnicity", "diabetes_sex", "diabetes_imdQ5", "diabetes_age_group") # create vector of table names
 
 ###Function to plot total diabetes graphs
-total_plotter <- function(data) {
+total_diabetes_plotter <- function(data) {
   ggplot(data, aes(x=reorder(indvar, -value), y=value, fill=variable)) +
       geom_bar(stat="identity") +
       geom_text(aes(label=value), size=3, position = position_stack(vjust = 0.5)) +
@@ -65,11 +65,11 @@ total_plotter <- function(data) {
     )
 }
 ###Loop over multiple variables and print output
-for(i in seq_along(total_plot_list)){
-  print(total_plotter(get(total_plot_list[i])))
+for(i in seq_along(total_diabetes_list)){
+  print(total_diabetes_plotter(get(total_diabetes_list[i])))
   ggsave(
-    plot=total_plotter(get(total_plot_list[i])),
-    filename=paste0("alltime_",total_plot_list[i],".png"),
+    plot=total_diabetes_plotter(get(total_diabetes_list[i])),
+    filename=paste0("alltime_",total_diabetes_list[i],".png"),
     path=here::here("output"))
 }
 
@@ -93,10 +93,10 @@ diabetes_prop_sex<-mutate(melt(subset(diabetes_proportion_by_sex, select=-Total_
 diabetes_prop_imdQ5<-mutate(melt(subset(diabetes_proportion_by_imdQ5, select=-Total_Diabetes_Patients), id="imdQ5"),indvar=imdQ5)
 diabetes_prop_age_group<-mutate(melt(subset(diabetes_proportion_by_age_group, select=-Total_Diabetes_Patients), id="age_group"),indvar=age_group)
 
-prop_plot_list<-c("diabetes_prop_region", "diabetes_prop_ethnicity", "diabetes_prop_sex", "diabetes_prop_imdQ5", "diabetes_prop_age_group") # create vector of table names
+prop_diabetes_list<-c("diabetes_prop_region", "diabetes_prop_ethnicity", "diabetes_prop_sex", "diabetes_prop_imdQ5", "diabetes_prop_age_group") # create vector of table names
 
 ###Function to plot diabetes proportion graphs
-prop_plotter <- function(data) {
+prop_diabetes_plotter <- function(data) {
   ggplot(data, aes(x=reorder(indvar, -value), y=value, fill=variable)) +
     geom_bar(stat="identity") +
     geom_text(aes(label=scales::percent(value, accuracy=1)), size=3, position = position_stack(vjust = 0.5)) +
@@ -117,10 +117,119 @@ prop_plotter <- function(data) {
     )
 }
 ###Loop over multiple variables and print output
-for(i in seq_along(prop_plot_list)){
-  print(prop_plotter(get(prop_plot_list[i])))
+for(i in seq_along(prop_diabetes_list)){
+  print(prop_diabetes_plotter(get(prop_diabetes_list[i])))
   ggsave(
-    plot=prop_plotter(get(prop_plot_list[i])),
-    filename=paste0("alltime_",prop_plot_list[i],".png"),
+    plot=prop_diabetes_plotter(get(prop_diabetes_list[i])),
+    filename=paste0("alltime_",prop_diabetes_list[i],".png"),
     path=here::here("output"))
 }
+
+
+
+
+
+
+###Venous Thromboembolism and Atrial Fibrillation###
+
+###Prepare total tables
+
+for(i in cut_by) {
+  assign(paste0("VTE_AF_uptake_by_",i), df_input %>%
+           group_by(across(all_of(i))) %>%
+           summarise(Total_VTE_AF_Patients = sum(VTE_AF), DOAC_only_users = sum(DOACs[Warfarin==0 & VTE_AF==1]),
+                     Warfarin_only_users = sum(Warfarin[DOACs==0 & VTE_AF==1]),
+                     Both = sum(Warfarin[DOACs==1 & VTE_AF==1]), Neither = Total_VTE_AF_Patients - DOAC_only_users
+                     - Warfarin_only_users - Both))
+}
+
+###Melt data to prepare for plot loop
+VTE_AF_region<-mutate(melt(subset(VTE_AF_uptake_by_region, select=-Total_VTE_AF_Patients), id="region"),indvar=region)
+VTE_AF_ethnicity<-mutate(na.omit(melt(subset(VTE_AF_uptake_by_ethnicity, select=-Total_VTE_AF_Patients), id="ethnicity")),indvar=ethnicity) # removed NA values
+VTE_AF_sex<-mutate(melt(subset(VTE_AF_uptake_by_sex, select=-Total_VTE_AF_Patients), id="sex"),indvar=sex)
+VTE_AF_imdQ5<-mutate(melt(subset(VTE_AF_uptake_by_imdQ5, select=-Total_VTE_AF_Patients), id="imdQ5"),indvar=imdQ5)
+VTE_AF_age_group<-mutate(melt(subset(VTE_AF_uptake_by_age_group, select=-Total_VTE_AF_Patients), id="age_group"),indvar=age_group)
+
+total_VTE_AF_list<-c("VTE_AF_region", "VTE_AF_ethnicity", "VTE_AF_sex", "VTE_AF_imdQ5", "VTE_AF_age_group") # create vector of table names
+
+###Function to plot total VTE_AF graphs
+total_VTE_AF_plotter <- function(data) {
+  ggplot(data, aes(x=reorder(indvar, -value), y=value, fill=variable)) +
+      geom_bar(stat="identity") +
+      geom_text(aes(label=value), size=3, position = position_stack(vjust = 0.5)) +
+      coord_flip() +
+      scale_fill_manual('Medicine', values=c("#0099cc", "#B0F2B4", "#BAF2E9","#FFD8BE"), labels=c("DOAC only", "Warfarin only", "Both", "Neither")) +
+      labs(
+        title=paste("Uptake of DOACs by", colnames(data[1]),"across England"),
+        caption=paste("Source: OpenSafely"),
+        x= str_to_title(colnames(data[1])),
+        y= "Number of Patients"
+      ) +
+      theme(
+      panel.background = element_rect(fill=NA),
+      panel.grid.major = element_blank(),
+      plot.title = element_text(hjust = 0.6),
+      plot.caption = element_text(hjust = -1)
+    )
+}
+###Loop over multiple variables and print output
+for(i in seq_along(total_VTE_AF_list)){
+  print(total_VTE_AF_plotter(get(total_VTE_AF_list[i])))
+  ggsave(
+    plot=total_VTE_AF_plotter(get(total_VTE_AF_list[i])),
+    filename=paste0("alltime_",total_VTE_AF_list[i],".png"),
+    path=here::here("output"))
+}
+
+###By proportion of population
+
+###Prepare proportion tables
+
+for(i in cut_by) {
+  assign(paste0("VTE_AF_proportion_by_",i), df_input %>%
+           group_by(across(all_of(i))) %>%
+           summarise(Total_VTE_AF_Patients = sum(VTE_AF), DOAC_only_users = (sum(DOACs[Warfarin==0 & VTE_AF==1]))/sum(VTE_AF),
+                     Warfarin_only_users = (sum(Warfarin[DOACs==0 & VTE_AF==1]))/sum(VTE_AF),
+                     Both = (sum(Warfarin[DOACs==1 & VTE_AF==1]))/sum(VTE_AF), Neither = (sum(VTE_AF) - (sum(DOACs[Warfarin==0 & VTE_AF==1]))
+                     - (sum(Warfarin[DOACs==0 & VTE_AF==1])) - (sum(Warfarin[DOACs==1 & VTE_AF==1])))/sum(VTE_AF)))
+}
+
+###Melt data to prepare for plot loop
+VTE_AF_prop_region<-mutate(melt(subset(VTE_AF_proportion_by_region, select=-Total_VTE_AF_Patients), id="region"),indvar=region)
+VTE_AF_prop_ethnicity<-mutate(na.omit(melt(subset(VTE_AF_proportion_by_ethnicity, select=-Total_VTE_AF_Patients), id="ethnicity")),indvar=ethnicity) # removed NA values
+VTE_AF_prop_sex<-mutate(melt(subset(VTE_AF_proportion_by_sex, select=-Total_VTE_AF_Patients), id="sex"),indvar=sex)
+VTE_AF_prop_imdQ5<-mutate(melt(subset(VTE_AF_proportion_by_imdQ5, select=-Total_VTE_AF_Patients), id="imdQ5"),indvar=imdQ5)
+VTE_AF_prop_age_group<-mutate(melt(subset(VTE_AF_proportion_by_age_group, select=-Total_VTE_AF_Patients), id="age_group"),indvar=age_group)
+
+prop_VTE_AF_list<-c("VTE_AF_prop_region", "VTE_AF_prop_ethnicity", "VTE_AF_prop_sex", "VTE_AF_prop_imdQ5", "VTE_AF_prop_age_group") # create vector of table names
+
+###Function to plot VTE_AF proportion graphs
+prop_VTE_AF_plotter <- function(data) {
+  ggplot(data, aes(x=reorder(indvar, -value), y=value, fill=variable)) +
+    geom_bar(stat="identity") +
+    geom_text(aes(label=scales::percent(value, accuracy=1)), size=3, position = position_stack(vjust = 0.5)) +
+    coord_flip() +
+    scale_fill_manual('Medicine', values=c("#0099cc", "#B0F2B4", "#BAF2E9","#FFD8BE"), labels=c("DOAC only", "Warfarin only", "Both", "Neither")) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(
+      title=paste("Uptake of DOACs by", colnames(data[1]),"across England"),
+      caption=paste("Source: OpenSafely"),
+      x= str_to_title(colnames(data[1])),
+      y= "Percentage of Patients"
+    ) +
+    theme(
+      panel.background = element_rect(fill=NA),
+      panel.grid.major = element_blank(),
+      plot.title = element_text(hjust = 0.6),
+      plot.caption = element_text(hjust = -1)
+    )
+}
+###Loop over multiple variables and print output
+for(i in seq_along(prop_VTE_AF_list)){
+  print(prop_VTE_AF_plotter(get(prop_VTE_AF_list[i])))
+  ggsave(
+    plot=prop_VTE_AF_plotter(get(prop_VTE_AF_list[i])),
+    filename=paste0("alltime_",prop_VTE_AF_list[i],".png"),
+    path=here::here("output"))
+}
+
